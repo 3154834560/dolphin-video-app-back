@@ -22,7 +22,7 @@ public class StringPool {
 
     public static final String DEFAULT_IMAGE_PATH = IMAGE_RESOURCE_PATH + DEFAULT_IMAGE_NAME;
 
-    public static final String URL = "http://192.168.1.5:8090/dolphin/";
+    public static final String URL = "http://43.139.159.32:8090/dolphin/";
 
     public static final String VIDEO_URL = URL + "video/";
 

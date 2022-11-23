@@ -39,7 +39,7 @@ public class CollectionOutput {
                 .setAuthor(video.getAuthor())
                 .setHeadPortraitUrl(headPortraitUrl)
                 .setNick(nick)
-                .setCoverUrl(video.getUrl());
+                .setCoverUrl(video.getCoverUrl());
     }
 
 }

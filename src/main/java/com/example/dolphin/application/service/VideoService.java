@@ -101,7 +101,7 @@ public class VideoService {
     }
 
     @Transactional(rollbackFor = Exception.class)
-    public VideoOutput support(String userName, String videoId, int n) {
+    public boolean support(String userName, String videoId, int n) {
         boolean exists = supportRepository.exists(SupportSpec.exists(userName, videoId));
         Video video = videoRepository.getById(videoId);
         if (exists) {
@@ -114,7 +114,12 @@ public class VideoService {
             Support support = new Support(userName, videoId);
             supportRepository.save(support);
         }
-        return VideoOutput.of(video);
+        return true;
+    }
+
+    @Transactional(rollbackFor = Exception.class)
+    public boolean isSupport(String userName, String videoId) {
+        return supportRepository.exists(SupportSpec.exists(userName, videoId));
     }
 
     @Transactional(rollbackFor = Exception.class)

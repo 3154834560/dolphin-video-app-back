@@ -50,12 +50,6 @@ public class VideoApi {
         return R.data(service.deleteBy(videoId));
     }
 
-    @PostMapping("/support/{videoId}/{n}")
-    @ResponseBody
-    public R<?> supportVideo(@RequestParam("userName") String userName, @PathVariable("videoId") String videoId,@PathVariable("n") int n) {
-        return R.data(service.support(userName,videoId,n));
-    }
-
     @PutMapping("/update/{videoId}")
     @ResponseBody
     public R<?> updateVideo(@PathVariable("videoId") String videoId, @RequestParam("introduction") String introduction) {

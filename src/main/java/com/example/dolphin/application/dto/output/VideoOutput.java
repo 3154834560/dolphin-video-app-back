@@ -51,7 +51,7 @@ public class VideoOutput {
                 .setAuthor(video.getAuthor())
                 .setAuthorNick(video.getAuthorNick())
                 .setIntroduction(video.getIntroduction())
-                .setCoverUrl(video.getIntroduction())
+                .setCoverUrl(video.getCoverUrl())
                 .setNumbers(video.getNumbers());
     }
 }
