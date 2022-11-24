@@ -12,6 +12,8 @@ public class StringPool {
 
     public static final String VIDEO_SLASH = "videos/";
 
+    public static final String SLASH = "/";
+
     public static final String VIDEO_RESOURCE_PATH = DATA_PATH + VIDEO_SLASH;
 
     public static final String IMAGE_SLASH = "images/";
