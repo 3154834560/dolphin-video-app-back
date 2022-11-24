@@ -4,10 +4,7 @@ import com.example.dolphin.application.dto.input.UserInput;
 import com.example.dolphin.application.dto.output.UserOutput;
 import com.example.dolphin.domain.entity.User;
 import com.example.dolphin.domain.entity.Video;
-import com.example.dolphin.domain.repository.CollectionRepository;
-import com.example.dolphin.domain.repository.ConcernRepository;
-import com.example.dolphin.domain.repository.SupportRepository;
-import com.example.dolphin.domain.repository.UserRepository;
+import com.example.dolphin.domain.repository.*;
 import com.example.dolphin.domain.specs.UserSpec;
 import com.example.dolphin.infrastructure.consts.StringPool;
 import com.example.dolphin.infrastructure.exception.DuplicateException;
@@ -32,6 +29,9 @@ public class UserService {
 
     @Autowired
     ConcernRepository concernRepository;
+
+    @Autowired
+    CommentRepository commentRepository;
 
     @Autowired
     CollectionRepository collectionRepository;
@@ -99,11 +99,12 @@ public class UserService {
 
 
     private void deleteData(User user) {
+        user.getVideos().forEach(this::deleteVideo);
         deleteSupport(user.getUserName());
         FileTool.deleteHeadPortrait(user.getHeadPortraitName());
-        user.getVideos().forEach(this::deleteVideo);
         deleteConcern(user.getUserName());
         deleteCollection(user.getUserName());
+        deleteComment(user.getUserName());
     }
 
     private void deleteSupport(String userName) {
@@ -126,6 +127,10 @@ public class UserService {
     private void deleteConcern(String userName) {
         concernRepository.deleteByUserName(userName);
         concernRepository.deleteByConcernedUserName(userName);
+    }
+
+    private void deleteComment(String userName){
+        commentRepository.deleteByUserName(userName);
     }
 
     public void checkingDuplicate(String filedName, String val) {
