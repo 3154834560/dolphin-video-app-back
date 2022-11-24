@@ -1,5 +1,6 @@
 package com.example.dolphin.infrastructure.tool;
 
+import cn.hutool.core.io.FileUtil;
 import com.example.dolphin.config.VideoAndAudioHandler;
 import com.example.dolphin.infrastructure.consts.StringPool;
 import lombok.extern.slf4j.Slf4j;
@@ -27,7 +28,7 @@ public class FileTool {
     public static void deleteFile(String filePath) {
         File file = new File(filePath);
         if (!filePath.endsWith(StringPool.DEFAULT_IMAGE_NAME) && file.exists()) {
-            file.delete();
+            FileUtil.del(file);
         }
     }
 

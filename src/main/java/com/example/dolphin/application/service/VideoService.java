@@ -13,7 +13,9 @@ import com.example.dolphin.domain.repository.VideoRepository;
 import com.example.dolphin.domain.specs.SupportSpec;
 import com.example.dolphin.infrastructure.consts.StringPool;
 import com.example.dolphin.infrastructure.tool.FileTool;
+import com.example.dolphin.infrastructure.tool.VideoTool;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -32,6 +34,18 @@ import java.util.stream.Collectors;
  */
 @Service
 public class VideoService {
+
+    /**
+     * 获取视频第一帧作为视频封面，第一帧图片类型，默认为 jpg
+     */
+    @Value("${image.type:jpg}")
+    private String imageType;
+
+    /**
+     * 获取视频第一帧作为视频封面，第一帧图片旋转角度
+     */
+    @Value("${image.rotate.angle:0}")
+    private int rotateAngle;
 
     @Autowired
     private VideoAndAudioHandler handler;
@@ -71,11 +85,15 @@ public class VideoService {
         String oldVideoName = video.getSubmittedFileName();
         String oldCoverName = cover == null ? oldVideoName : cover.getSubmittedFileName();
         String newVideoName = System.currentTimeMillis() + FileTool.getType(oldVideoName);
-        String newCoverName = cover == null ? newVideoName : System.currentTimeMillis() + FileTool.getType(oldCoverName);
+        String newCoverName = cover == null ? System.currentTimeMillis() + StringPool.DOT + imageType : System.currentTimeMillis() + FileTool.getType(oldCoverName);
         try {
             video.write(StringPool.VIDEO_SLASH + newVideoName);
             if (cover != null) {
                 cover.write(StringPool.IMAGE_SLASH + newCoverName);
+            } else {
+                String newVideoPath = StringPool.VIDEO_RESOURCE_PATH + newVideoName;
+                String newCoverPath = StringPool.IMAGE_RESOURCE_PATH + newCoverName;
+                VideoTool.getVideoFirstImg(newVideoPath, newCoverPath, imageType, rotateAngle);
             }
             save(userName, introduction, newVideoName, newCoverName);
         } catch (Exception e) {
