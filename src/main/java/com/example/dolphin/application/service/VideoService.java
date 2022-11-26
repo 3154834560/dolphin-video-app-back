@@ -154,6 +154,11 @@ public class VideoService {
         return videos.stream().filter(Objects::nonNull).collect(Collectors.toList());
     }
 
+    @Transactional(rollbackFor = Exception.class)
+    public VideoOutput getById(String id){
+        return VideoOutput.of(getBy(id));
+    }
+
     public Video getBy(String id) {
         return videoRepository.findVideoById(id);
     }

@@ -27,6 +27,12 @@ public class VideoApi {
         return R.data(service.getAllBy(userName));
     }
 
+    @GetMapping
+    @ResponseBody
+    public R<?> getBy(@RequestParam("id") String id){
+        return R.data(service.getById(id));
+    }
+
     @GetMapping("/random/{index}")
     @ResponseBody
     public R<?> randomGet(@PathVariable("index") int index){
