@@ -45,6 +45,9 @@ public class VideoOutput {
     private long numbers;
 
     public static VideoOutput of(Video video) {
+        if (video == null) {
+            return null;
+        }
         return new VideoOutput()
                 .setId(video.getId())
                 .setUrl(video.getUrl())
