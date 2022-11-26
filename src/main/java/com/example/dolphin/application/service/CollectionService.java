@@ -1,9 +1,8 @@
 package com.example.dolphin.application.service;
 
-import com.example.dolphin.application.dto.output.CollectionOutput;
-import com.example.dolphin.application.dto.output.UserOutput;
+
+import com.example.dolphin.application.dto.output.VideoOutput;
 import com.example.dolphin.domain.entity.Collection;
-import com.example.dolphin.domain.entity.User;
 import com.example.dolphin.domain.entity.Video;
 import com.example.dolphin.domain.repository.CollectionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,13 +30,12 @@ public class CollectionService {
     VideoService videoService;
 
     @Transactional(rollbackFor = Exception.class)
-    public List<CollectionOutput> getAllCollection(String userName) {
+    public List<VideoOutput> getAllCollection(String userName) {
         List<Collection> collections = collectionRepository.findAllByUserName(userName);
-        UserOutput user = userService.getBy(userName);
-        List<CollectionOutput> outputs = new ArrayList<>();
+        List<VideoOutput> outputs = new ArrayList<>();
         List<Video> videos = videoService.getBy(collections.stream().map(Collection::getVideoId).collect(Collectors.toList()));
         for (Video video : videos) {
-            outputs.add(CollectionOutput.of(video, user.getHeadPortraitUrl(), user.getNick()));
+            outputs.add(VideoOutput.of(video));
         }
         return outputs;
     }

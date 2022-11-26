@@ -28,6 +28,8 @@ public class CollectionOutput {
      */
     private String coverUrl;
 
+    private String videoUrl;
+
     /**
      * 视频简介
      */
@@ -39,7 +41,9 @@ public class CollectionOutput {
                 .setAuthor(video.getAuthor())
                 .setHeadPortraitUrl(headPortraitUrl)
                 .setNick(nick)
-                .setCoverUrl(video.getCoverUrl());
+                .setCoverUrl(video.getCoverUrl())
+                .setIntroduction(video.getIntroduction())
+                .setVideoUrl(video.getUrl());
     }
 
 }
