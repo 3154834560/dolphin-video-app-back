@@ -26,7 +26,7 @@ public class ConcernService {
     @Transactional(rollbackFor = Exception.class)
     public List<ConcernOutput> getAllConcern(String userName) {
         List<Concern> concerns = concernRepository.findAllByUserName(userName);
-        return userService.getBy(concerns.stream().map(Concern::getUserName).collect(Collectors.toList()))
+        return userService.getBy(concerns.stream().map(Concern::getConcernedUserName).collect(Collectors.toList()))
                 .stream().map(ConcernOutput::of).collect(Collectors.toList());
     }
 
