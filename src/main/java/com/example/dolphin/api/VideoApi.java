@@ -29,14 +29,14 @@ public class VideoApi {
 
     @GetMapping
     @ResponseBody
-    public R<?> getBy(@RequestParam("id") String id){
+    public R<?> getBy(@RequestParam("id") String id) {
         return R.data(service.getById(id));
     }
 
     @GetMapping("/random/{index}")
     @ResponseBody
-    public R<?> randomGet(@PathVariable("index") int index){
-        return  R.data(service.randomGet(index));
+    public R<?> randomGet(@PathVariable("index") int index) {
+        return R.data(service.randomGet(index));
     }
 
     @GetMapping("/{name}")
@@ -48,6 +48,12 @@ public class VideoApi {
     @ResponseBody
     public R<?> uploadVideo(@RequestParam("userName") String userName, @RequestParam("introduction") String introduction, @RequestPart("video") Part video, @RequestPart(name = "cover", required = false) Part cover) {
         return R.data(service.uploadVideo(userName, introduction, video, cover));
+    }
+
+    @PostMapping("/shard")
+    @ResponseBody
+    public R<?> uploadShardVideo(@RequestParam("videoInput") String videoInputStr, @RequestPart(name = "video", required = false) Part video, @RequestPart(name = "cover", required = false) Part cover) {
+        return R.data(service.uploadVideo(videoInputStr, video, cover));
     }
 
     @DeleteMapping("/{videoId}")

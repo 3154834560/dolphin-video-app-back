@@ -1,6 +1,7 @@
 package com.example.dolphin.application.service;
 
 import cn.hutool.core.util.RandomUtil;
+import com.example.dolphin.application.dto.input.VideoInput;
 import com.example.dolphin.application.dto.output.VideoOutput;
 import com.example.dolphin.config.VideoAndAudioHandler;
 import com.example.dolphin.domain.entity.Support;
@@ -14,6 +15,8 @@ import com.example.dolphin.domain.specs.SupportSpec;
 import com.example.dolphin.infrastructure.consts.StringPool;
 import com.example.dolphin.infrastructure.tool.FileTool;
 import com.example.dolphin.infrastructure.tool.VideoTool;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.PageRequest;
@@ -23,6 +26,9 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.Part;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -105,6 +111,45 @@ public class VideoService {
         return true;
     }
 
+
+    @Transactional(rollbackFor = Exception.class)
+    public boolean uploadVideo(String videoInputStr, Part video, Part cover) {
+        ObjectMapper objectMapper = new ObjectMapper();
+        VideoInput videoInput = null;
+        try {
+            videoInput = objectMapper.readValue(videoInputStr, VideoInput.class);
+        } catch (JsonProcessingException e) {
+            return false;
+        }
+        if (video == null) {
+            return true;
+        }
+        String videoPath = StringPool.VIDEO_RESOURCE_PATH + videoInput.getVideoName();
+        String coverPath = StringPool.IMAGE_RESOURCE_PATH + videoInput.getCoverName(imageType);
+        try {
+            InputStream videoInputStream = video.getInputStream();
+            FileOutputStream videoOutputStream = new FileOutputStream(new File(videoPath), true);
+            FileTool.downFile(videoInputStream, videoOutputStream);
+            if (cover != null && videoInput.isHasCover()) {
+                InputStream coverInputStream = cover.getInputStream();
+                FileOutputStream coverOutputStream = new FileOutputStream(new File(coverPath));
+                FileTool.downFile(coverInputStream, coverOutputStream);
+            } else if (cover == null && !videoInput.isHasCover() && videoInput.isEnd()) {
+                VideoTool.getVideoFirstImg(videoPath, coverPath, imageType, rotateAngle);
+            }
+            if (videoInput.isEnd()) {
+                save(videoInput.getUserName(), videoInput.getVideoIntroduction(), videoInput.getVideoName(), videoInput.getCoverName(imageType));
+            }
+        } catch (Exception e) {
+            FileTool.deleteFile(videoPath);
+            FileTool.deleteFile(coverPath);
+            e.printStackTrace();
+            return false;
+        }
+        return true;
+    }
+
+
     @Transactional(rollbackFor = Exception.class)
     public boolean deleteBy(String videoId) {
         Video video = videoRepository.getById(videoId);
@@ -155,7 +200,7 @@ public class VideoService {
     }
 
     @Transactional(rollbackFor = Exception.class)
-    public VideoOutput getById(String id){
+    public VideoOutput getById(String id) {
         return VideoOutput.of(getBy(id));
     }
 
@@ -177,6 +222,5 @@ public class VideoService {
         user.addVideos(video);
         userRepository.save(user);
     }
-
 
 }

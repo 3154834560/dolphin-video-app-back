@@ -9,6 +9,9 @@ import org.springframework.util.StringUtils;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -30,6 +33,17 @@ public class FileTool {
         if (!filePath.endsWith(StringPool.DEFAULT_IMAGE_NAME) && file.exists()) {
             FileUtil.del(file);
         }
+    }
+
+    public static void downFile(InputStream inputStream, OutputStream outputStream) throws IOException {
+        byte[] bytes = new byte[1024];
+        int len = 0;
+        while ((len = inputStream.read(bytes)) > 0) {
+            outputStream.write(bytes, 0, len);
+        }
+        inputStream.close();
+        outputStream.flush();
+        outputStream.close();
     }
 
     public static void downFile(String filePath, VideoAndAudioHandler handler, HttpServletRequest request, HttpServletResponse response) {
