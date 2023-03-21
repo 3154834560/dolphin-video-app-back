@@ -1,0 +1,14 @@
+{
+  "outPath": "./src/main/resources/static/doc",
+  "allInOne": true,
+  "allInOneDocFileName":"index.html",
+  "packageFilters": "com.example.dolphin.api",
+  "coverOld": true,
+  "projectName": "海豚视频",
+  "isStrict": false,
+  "openUrl": "http://localhost:7700/api",
+  "appToken": "e2dbe54fdbd14c8c8b9af1bb9effcbd4",
+  "debugEnvName":"测试环境",
+  "debugEnvUrl":"http://127.0.0.1:8090",
+  "replace": true
+}

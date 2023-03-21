@@ -1,33 +1,33 @@
 package com.example.dolphin.domain.entity;
 
-import com.example.dolphin.acomm.infrastructure.support.SnowflakeIdGenerator;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.GenericGenerator;
-import org.hibernate.annotations.UpdateTimestamp;
+import com.example.dolphin.acomm.domain.BaseEntity;
+import com.example.dolphin.infrastructure.consts.StringPool;
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
-import javax.persistence.*;
-import java.time.LocalDateTime;
-import java.util.List;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.ManyToOne;
 
 /**
  * @author 王景阳
  * @date 2022/10/29 20:36
  */
-@EqualsAndHashCode
-@Data
+@Getter
 @Entity
-public class Video {
-
-    /**
-     * 数据库 id
-     */
-    @Id
-    @GeneratedValue(generator = "snowflake")
-    @GenericGenerator(name = "snowflake", strategy = SnowflakeIdGenerator.TYPE)
-    @Column(length = 36)
-    private String id;
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+public class Video extends BaseEntity {
+    public Video(User user, String videoName, String coverName, String introduction) {
+        this.user = user;
+        this.url = StringPool.VIDEO_URL + videoName;
+        this.videoName = videoName;
+        this.coverUrl = StringPool.IMAGE_URL + coverName;
+        this.coverName = coverName;
+        this.introduction = introduction;
+        this.numbers = 0;
+    }
 
     /**
      * 视频播放Url
@@ -40,21 +40,6 @@ public class Video {
     private String videoName;
 
     /**
-     * 视频作者，对应用户名
-     */
-    private String author;
-
-    /**
-     * 视频作者昵称
-     */
-    private String authorNick;
-
-    /**
-     * 视频简介
-     */
-    private String introduction;
-
-    /**
      * 视频封面
      */
     private String coverUrl;
@@ -65,28 +50,17 @@ public class Video {
     private String coverName;
 
     /**
+     * 视频简介
+     */
+    @Setter
+    private String introduction;
+
+    /**
      * 点赞数
      */
+    @Setter
     private long numbers;
 
-    /**
-     * 创建时间
-     */
-    @Column(updatable = false)
-    @CreationTimestamp
-    private LocalDateTime createAt;
-    /**
-     * 最后更新时间
-     */
-    @UpdateTimestamp
-    private LocalDateTime updateAt;
-
-    @JoinColumn(name = "parent_id")
-    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
-    private List<Comment> comments;
-
-    public void addComment(Comment comment){
-        this.comments.add(comment);
-    }
-
+    @ManyToOne(fetch = FetchType.LAZY)
+    private User user;
 }

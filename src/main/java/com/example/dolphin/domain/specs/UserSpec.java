@@ -2,6 +2,7 @@ package com.example.dolphin.domain.specs;
 
 
 import com.example.dolphin.domain.entity.User;
+import com.example.dolphin.domain.entity.User_;
 import org.springframework.data.jpa.domain.Specification;
 
 /**
@@ -10,12 +11,12 @@ import org.springframework.data.jpa.domain.Specification;
  */
 public class UserSpec {
 
-    public static Specification<User> exists(String filedName, String val) {
+    public static Specification<User> userName(String val) {
         return (root, query, cb) -> {
             if (val == null) {
                 return cb.disjunction();
             }
-            return cb.equal(root.get(filedName), val);
+            return cb.equal(root.get(User_.userName), val);
         };
     }
 

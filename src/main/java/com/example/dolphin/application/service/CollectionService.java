@@ -3,13 +3,15 @@ package com.example.dolphin.application.service;
 
 import com.example.dolphin.application.dto.output.VideoOutput;
 import com.example.dolphin.domain.entity.Collection;
-import com.example.dolphin.domain.entity.Video;
 import com.example.dolphin.domain.repository.CollectionRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.example.dolphin.domain.repository.UserRepository;
+import com.example.dolphin.domain.repository.VideoRepository;
+import com.example.dolphin.domain.specs.CollectionSpec;
+import com.example.dolphin.domain.specs.UserSpec;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -18,38 +20,32 @@ import java.util.stream.Collectors;
  * @date 2022/11/10 18:50
  */
 @Service
+@RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class CollectionService {
 
-    @Autowired
-    CollectionRepository collectionRepository;
+    private final CollectionRepository repository;
 
-    @Autowired
-    UserService userService;
+    private final UserRepository userRepository;
 
-    @Autowired
-    VideoService videoService;
+    private final VideoRepository videoRepository;
 
-    @Transactional(rollbackFor = Exception.class)
     public List<VideoOutput> getAllCollection(String userName) {
-        List<Collection> collections = collectionRepository.findAllByUserName(userName);
-        List<VideoOutput> outputs = new ArrayList<>();
-        List<Video> videos = videoService.getBy(collections.stream().map(Collection::getVideoId).collect(Collectors.toList()));
-        for (Video video : videos) {
-            outputs.add(VideoOutput.of(video));
-        }
-        return outputs;
+        List<Collection> collections = repository.findAll(CollectionSpec.userName(userName));
+        return collections.stream().map(c -> VideoOutput.of(c.getVideo())).collect(Collectors.toList());
     }
 
     @Transactional(rollbackFor = Exception.class)
     public boolean collection(String userName, String videoId) {
-        Collection collection = new Collection(userName, videoId);
-        collectionRepository.save(collection);
+        Collection collection = new Collection(userRepository.getBy(UserSpec.userName(userName)), videoRepository.getById(videoId));
+        repository.save(collection);
         return true;
     }
 
     @Transactional(rollbackFor = Exception.class)
     public boolean unCollection(String userName, String videoId) {
-        collectionRepository.deleteByUserNameAndVideoId(userName, videoId);
+        Collection collection = repository.getBy(CollectionSpec.userName(userName).and(CollectionSpec.videoId(videoId)));
+        repository.delete(collection);
         return true;
     }
 }

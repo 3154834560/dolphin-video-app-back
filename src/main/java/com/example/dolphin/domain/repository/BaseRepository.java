@@ -11,6 +11,7 @@ import org.springframework.data.repository.NoRepositoryBean;
 import org.springframework.lang.NonNull;
 import org.springframework.lang.Nullable;
 
+import java.util.List;
 import java.util.function.Function;
 
 /**
@@ -35,6 +36,13 @@ public interface BaseRepository<T> extends JpaRepository<T, String>, JpaSpecific
         return this.findById(id).orElseThrow(() -> new AppException("EntityNotFound!"));
     }
 
+    default T getBy(@NonNull Specification<T> spec) {
+        List<T> all = this.findAll(spec);
+        if (all.isEmpty()) {
+            return null;
+        }
+        return all.get(0);
+    }
 
     default boolean delById(@NonNull String id) {
         this.deleteById(id);

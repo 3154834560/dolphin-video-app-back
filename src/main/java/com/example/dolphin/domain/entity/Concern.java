@@ -1,39 +1,31 @@
 package com.example.dolphin.domain.entity;
 
-import com.example.dolphin.acomm.infrastructure.support.SnowflakeIdGenerator;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import org.hibernate.annotations.GenericGenerator;
+import com.example.dolphin.acomm.domain.BaseEntity;
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
-import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.FetchType;
+import javax.persistence.ManyToOne;
 
 /**
  * @author 王景阳
  * @date 2022/11/10 18:31
  */
-@EqualsAndHashCode
-@Data
+@Getter
 @Entity
-public class Concern {
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+public class Concern extends BaseEntity {
 
-    @Id
-    @GeneratedValue(generator = "snowflake")
-    @GenericGenerator(name = "snowflake", strategy = SnowflakeIdGenerator.TYPE)
-    @Column(length = 36)
-    private String id;
+    @ManyToOne(fetch = FetchType.LAZY)
+    private User user;
 
-    private String userName;
+    @ManyToOne(fetch = FetchType.LAZY)
+    private User concernedUser;
 
-    private String concernedUserName;
-
-    public Concern() {
-    }
-
-    public Concern(String userName, String concernedUserName) {
-        this.userName = userName;
-        this.concernedUserName = concernedUserName;
+    public Concern(User user, User concernedUser) {
+        this.user = user;
+        this.concernedUser = concernedUser;
     }
 }

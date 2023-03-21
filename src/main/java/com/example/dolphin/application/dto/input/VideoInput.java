@@ -1,19 +1,13 @@
 package com.example.dolphin.application.dto.input;
 
 import com.example.dolphin.infrastructure.consts.StringPool;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.Data;
 
 /**
  * @author 王景阳
  * @date 2022/11/30 8:42
  */
-@Getter
-@AllArgsConstructor
-@NoArgsConstructor
-@Setter
+@Data
 public class VideoInput {
 
     private String userName;

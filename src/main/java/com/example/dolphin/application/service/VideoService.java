@@ -1,37 +1,29 @@
 package com.example.dolphin.application.service;
 
-import cn.hutool.core.util.RandomUtil;
 import com.example.dolphin.application.dto.input.VideoInput;
 import com.example.dolphin.application.dto.output.VideoOutput;
-import com.example.dolphin.config.VideoAndAudioHandler;
-import com.example.dolphin.domain.entity.Support;
 import com.example.dolphin.domain.entity.User;
 import com.example.dolphin.domain.entity.Video;
-import com.example.dolphin.domain.repository.CollectionRepository;
-import com.example.dolphin.domain.repository.SupportRepository;
-import com.example.dolphin.domain.repository.UserRepository;
-import com.example.dolphin.domain.repository.VideoRepository;
-import com.example.dolphin.domain.specs.SupportSpec;
+import com.example.dolphin.domain.repository.*;
+import com.example.dolphin.domain.specs.*;
 import com.example.dolphin.infrastructure.consts.StringPool;
 import com.example.dolphin.infrastructure.tool.FileTool;
 import com.example.dolphin.infrastructure.tool.VideoTool;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.Part;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
-import java.util.Objects;
 import java.util.stream.Collectors;
 
 /**
@@ -39,6 +31,8 @@ import java.util.stream.Collectors;
  * @date 2022/10/29 19:09
  */
 @Service
+@RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class VideoService {
 
     /**
@@ -53,37 +47,24 @@ public class VideoService {
     @Value("${image.rotate.angle:0}")
     private int rotateAngle;
 
-    @Autowired
-    private VideoAndAudioHandler handler;
+    private final UserRepository userRepository;
 
-    @Autowired
-    private UserRepository userRepository;
+    private final VideoRepository videoRepository;
 
-    @Autowired
-    private VideoRepository videoRepository;
+    private final CollectionRepository collectionRepository;
 
-    @Autowired
-    private CollectionRepository collectionRepository;
+    private final SupportRepository supportRepository;
 
-    @Autowired
-    private SupportRepository supportRepository;
+    private final CommentRepository commentRepository;
 
-    @Transactional(rollbackFor = Exception.class)
     public List<VideoOutput> getAllBy(String userName) {
-        return userRepository.findByUserName(userName).getVideos().stream().map(VideoOutput::of).collect(Collectors.toList());
+        return videoRepository.findAll(VideoSpec.userName(userName)).stream().map(VideoOutput::of).collect(Collectors.toList());
     }
 
-    @Transactional(rollbackFor = Exception.class)
     public List<VideoOutput> randomGet(int index) {
         List<Video> content = new ArrayList<>(videoRepository.findAll(PageRequest.of(index, StringPool.PAGE_SIZE)).getContent());
-        content.add(null);
-        List<Video> videos = RandomUtil.randomEleList(content, content.size() - 1);
-        return videos.stream().filter(Objects::nonNull).map(VideoOutput::of).collect(Collectors.toList());
-    }
-
-    public void downVideo(String name, HttpServletRequest request, HttpServletResponse response) {
-        String filePath = StringPool.VIDEO_RESOURCE_PATH + name;
-        FileTool.downFile(filePath, handler, request, response);
+        Collections.shuffle(content);
+        return content.stream().map(VideoOutput::of).collect(Collectors.toList());
     }
 
     @Transactional(rollbackFor = Exception.class)
@@ -153,36 +134,8 @@ public class VideoService {
     @Transactional(rollbackFor = Exception.class)
     public boolean deleteBy(String videoId) {
         Video video = videoRepository.getById(videoId);
-        String videoPath = StringPool.VIDEO_RESOURCE_PATH + video.getVideoName();
-        String coverPath = StringPool.IMAGE_RESOURCE_PATH + video.getCoverName();
-        FileTool.deleteFile(videoPath);
-        FileTool.deleteFile(coverPath);
-        collectionRepository.deleteByVideoId(videoId);
-        supportRepository.deleteByVideoId(videoId);
-        videoRepository.delById(videoId);
+        deleteVideo(video);
         return true;
-    }
-
-    @Transactional(rollbackFor = Exception.class)
-    public boolean support(String userName, String videoId, int n) {
-        boolean exists = supportRepository.exists(SupportSpec.exists(userName, videoId));
-        Video video = videoRepository.getById(videoId);
-        if (exists) {
-            if (n < 0) {
-                video.setNumbers(video.getNumbers() + n);
-                supportRepository.deleteByUserNameAndVideoId(userName, videoId);
-            }
-        } else {
-            video.setNumbers(video.getNumbers() + n);
-            Support support = new Support(userName, videoId);
-            supportRepository.save(support);
-        }
-        return true;
-    }
-
-    @Transactional(rollbackFor = Exception.class)
-    public boolean isSupport(String userName, String videoId) {
-        return supportRepository.exists(SupportSpec.exists(userName, videoId));
     }
 
     @Transactional(rollbackFor = Exception.class)
@@ -192,35 +145,24 @@ public class VideoService {
         return VideoOutput.of(video);
     }
 
-    @Transactional(rollbackFor = Exception.class)
-    public List<Video> getBy(List<String> ids) {
-        List<Video> videos = new ArrayList<>();
-        ids.forEach(id -> videos.add(getBy(id)));
-        return videos.stream().filter(Objects::nonNull).collect(Collectors.toList());
-    }
-
-    @Transactional(rollbackFor = Exception.class)
     public VideoOutput getById(String id) {
-        return VideoOutput.of(getBy(id));
-    }
-
-    public Video getBy(String id) {
-        return videoRepository.findVideoById(id);
+        return VideoOutput.of(videoRepository.getById(id));
     }
 
     private void save(String userName, String introduction, String videoName, String coverName) {
-        User user = userRepository.findByUserName(userName);
-        Video video = new Video();
-        video.setAuthor(user.getUserName());
-        video.setIntroduction(introduction);
-        video.setVideoName(videoName);
-        video.setCoverName(coverName);
-        video.setAuthorNick(user.getNick());
-        video.setUrl(StringPool.VIDEO_URL + videoName);
-        video.setCoverUrl(StringPool.IMAGE_URL + coverName);
+        User user = userRepository.getBy(UserSpec.userName(userName));
+        Video video = new Video(user, videoName, coverName, introduction);
         videoRepository.save(video);
-        user.addVideos(video);
-        userRepository.save(user);
     }
 
+    public void deleteVideo(Video video) {
+        collectionRepository.delete(collectionRepository.getBy(CollectionSpec.videoId(video.getId())));
+        commentRepository.delete(commentRepository.getBy(CommentSpec.videoId(video.getId())));
+        supportRepository.delete(supportRepository.getBy(SupportSpec.videoId(video.getId())));
+        videoRepository.delete(video);
+        String videoPath = StringPool.VIDEO_RESOURCE_PATH + video.getVideoName();
+        String coverPath = StringPool.IMAGE_RESOURCE_PATH + video.getCoverName();
+        FileTool.deleteFile(videoPath);
+        FileTool.deleteFile(coverPath);
+    }
 }

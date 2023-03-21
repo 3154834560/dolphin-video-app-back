@@ -1,6 +1,6 @@
 package com.example.dolphin.application.dto.output;
 
-import com.example.dolphin.domain.entity.User;
+import com.example.dolphin.domain.entity.Concern;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
@@ -18,11 +18,11 @@ public class ConcernOutput {
 
     private String nick;
 
-    public static ConcernOutput of(User user) {
+    public static ConcernOutput of(Concern concern) {
         return new ConcernOutput()
-                .setUserName(user.getUserName())
-                .setHeadPortraitUrl(user.getHeadPortraitUrl())
-                .setNick(user.getNick());
+                .setUserName(concern.getUser().getUserName())
+                .setHeadPortraitUrl(concern.getUser().getHeadPortraitUrl())
+                .setNick(concern.getUser().getNick());
     }
 
 }

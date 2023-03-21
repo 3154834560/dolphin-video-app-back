@@ -2,18 +2,18 @@ package com.example.dolphin.application.service;
 
 import com.example.dolphin.application.dto.input.UserInput;
 import com.example.dolphin.application.dto.output.UserOutput;
+import com.example.dolphin.domain.entity.Concern;
 import com.example.dolphin.domain.entity.User;
 import com.example.dolphin.domain.entity.Video;
 import com.example.dolphin.domain.repository.*;
-import com.example.dolphin.domain.specs.UserSpec;
+import com.example.dolphin.domain.specs.*;
 import com.example.dolphin.infrastructure.consts.StringPool;
 import com.example.dolphin.infrastructure.exception.DuplicateException;
 import com.example.dolphin.infrastructure.tool.FileTool;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -21,42 +21,36 @@ import java.util.stream.Collectors;
  * @author 王景阳
  * @date 2022/10/29 20:59
  */
+@RequiredArgsConstructor
 @Service
 public class UserService {
 
-    @Autowired
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
 
-    @Autowired
-    ConcernRepository concernRepository;
+    private final ConcernRepository concernRepository;
 
-    @Autowired
-    CommentRepository commentRepository;
+    private final CommentRepository commentRepository;
 
-    @Autowired
-    CollectionRepository collectionRepository;
+    private final CollectionRepository collectionRepository;
 
-    @Autowired
-    SupportRepository supportRepository;
+    private final SupportRepository supportRepository;
 
-    @Autowired
-    VideoService videoService;
+    private final VideoRepository videoRepository;
 
-    @Transactional(rollbackFor = Exception.class)
+    private final VideoService videoService;
+
     public List<UserOutput> getAll() {
         return userRepository.findAll().stream().map(UserOutput::of).collect(Collectors.toList());
     }
 
-    @Transactional(rollbackFor = Exception.class)
     public UserOutput getBy(String userName) {
-        return UserOutput.of(userRepository.findByUserName(userName));
+        return UserOutput.of(userRepository.getBy(UserSpec.userName(userName)));
     }
 
     @Transactional(rollbackFor = Exception.class)
     public UserOutput createBy(UserInput input) {
-        checkingDuplicate(StringPool.USER_NAME, input.getUserName());
-        User user = new User();
-        input.copy(user);
+        checkingDuplicate(input.getUserName());
+        User user = input.to();
         user.setHeadPortraitUrl(StringPool.DEFAULT_IMAGE_URL);
         user.setHeadPortraitName(StringPool.DEFAULT_IMAGE_NAME);
         userRepository.save(user);
@@ -65,24 +59,22 @@ public class UserService {
 
     @Transactional(rollbackFor = Exception.class)
     public UserOutput updateBy(UserInput input) {
-        User user = userRepository.findByUserName(input.getUserName());
+        User user = userRepository.getBy(UserSpec.userName(input.getUserName()));
         input.copy(user);
-        userRepository.save(user);
         return UserOutput.of(user);
     }
 
     @Transactional(rollbackFor = Exception.class)
     public boolean deleteBy(String userName) {
-        User user = userRepository.findByUserName(userName);
+        User user = userRepository.getBy(UserSpec.userName(userName));
         deleteData(user);
-        userRepository.deleteByUserName(userName);
+        userRepository.delete(user);
         return true;
     }
 
-    @Transactional(rollbackFor = Exception.class)
     public int verify(String userName, String password) {
         int verifyResult = 2;
-        User user = userRepository.findByUserName(userName);
+        User user = userRepository.getBy(UserSpec.userName(userName));
         if (user == null) {
             verifyResult = 0;
         } else if (!user.getPassword().equals(password)) {
@@ -91,51 +83,37 @@ public class UserService {
         return verifyResult;
     }
 
-    public List<User> getBy(List<String> userNames) {
-        List<User> users = new ArrayList<>();
-        userNames.forEach(userName -> users.add(userRepository.findByUserName(userName)));
-        return users;
-    }
-
-
     private void deleteData(User user) {
-        user.getVideos().forEach(this::deleteVideo);
-        deleteSupport(user.getUserName());
+        deleteConcern(user.getId());
+        deleteCollection(user.getId());
+        deleteComment(user.getId());
+        deleteSupport(user.getId());
+        List<Video> videos = videoRepository.findAll(VideoSpec.userId(user.getId()));
+        videos.forEach(videoService::deleteVideo);
         FileTool.deleteHeadPortrait(user.getHeadPortraitName());
-        deleteConcern(user.getUserName());
-        deleteCollection(user.getUserName());
-        deleteComment(user.getUserName());
     }
 
-    private void deleteSupport(String userName) {
-        supportRepository.deleteByUserName(userName);
+    private void deleteSupport(String userId) {
+        supportRepository.findAll(SupportSpec.userId(userId));
     }
 
-    private void deleteVideo(Video video) {
-        String videoPath = StringPool.VIDEO_RESOURCE_PATH + video.getVideoName();
-        String coverPath = StringPool.IMAGE_RESOURCE_PATH + video.getCoverName();
-        FileTool.deleteFile(videoPath);
-        FileTool.deleteFile(coverPath);
-        supportRepository.deleteByVideoId(video.getId());
-        collectionRepository.deleteByVideoId(video.getId());
+    private void deleteCollection(String userId) {
+        collectionRepository.findAll(CollectionSpec.userId(userId));
     }
 
-    private void deleteCollection(String userName) {
-        collectionRepository.deleteByUserName(userName);
+    private void deleteConcern(String userId) {
+        List<Concern> all = concernRepository.findAll(ConcernSpec.userName(userId));
+        all.addAll(concernRepository.findAll(ConcernSpec.concernedUserName(userId)));
+        concernRepository.deleteAll(all);
     }
 
-    private void deleteConcern(String userName) {
-        concernRepository.deleteByUserName(userName);
-        concernRepository.deleteByConcernedUserName(userName);
+    private void deleteComment(String userId) {
+        commentRepository.deleteAll(commentRepository.findAll(CommentSpec.userId(userId)));
     }
 
-    private void deleteComment(String userName){
-        commentRepository.deleteByUserName(userName);
-    }
-
-    public void checkingDuplicate(String filedName, String val) {
-        if (userRepository.exists(UserSpec.exists(filedName, val))) {
-            throw new DuplicateException("当前 " + filedName + ": [ " + val + " ] 已存在！");
+    public void checkingDuplicate(String val) {
+        if (userRepository.exists(UserSpec.userName(val))) {
+            throw new DuplicateException("当前用户名[ " + val + " ] 已存在！");
         }
     }
 

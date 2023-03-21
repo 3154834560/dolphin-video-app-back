@@ -1,39 +1,31 @@
 package com.example.dolphin.domain.entity;
 
-import com.example.dolphin.acomm.infrastructure.support.SnowflakeIdGenerator;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import org.hibernate.annotations.GenericGenerator;
+import com.example.dolphin.acomm.domain.BaseEntity;
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
-import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.FetchType;
+import javax.persistence.ManyToOne;
 
 /**
  * @author 王景阳
  * @date 2022/11/10 18:41
  */
-@EqualsAndHashCode
-@Data
+@Getter
 @Entity
-public class Collection {
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+public class Collection extends BaseEntity {
 
-    @Id
-    @GeneratedValue(generator = "snowflake")
-    @GenericGenerator(name = "snowflake", strategy = SnowflakeIdGenerator.TYPE)
-    @Column(length = 36)
-    private String id;
+    @ManyToOne(fetch = FetchType.LAZY)
+    private User user;
 
-    private String userName;
+    @ManyToOne(fetch = FetchType.LAZY)
+    private Video video;
 
-    private String videoId;
-
-    public Collection() {
-    }
-
-    public Collection(String userName, String videoId) {
-        this.userName = userName;
-        this.videoId = videoId;
+    public Collection(User user, Video video) {
+        this.user = user;
+        this.video = video;
     }
 }

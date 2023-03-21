@@ -7,11 +7,4 @@ import com.example.dolphin.domain.entity.Support;
  * @date 2022/11/11 21:20
  */
 public interface SupportRepository extends BaseRepository<Support> {
-
-    Integer deleteByUserNameAndVideoId(String userName, String videoId);
-
-    Integer deleteByUserName(String userName);
-
-    Integer deleteByVideoId(String videoId);
-
 }

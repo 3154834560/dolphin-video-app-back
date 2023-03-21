@@ -7,7 +7,4 @@ import com.example.dolphin.domain.entity.Video;
  * @date 2022/10/29 20:59
  */
 public interface VideoRepository extends BaseRepository<Video> {
-
-    Video findVideoById(String id);
-
 }

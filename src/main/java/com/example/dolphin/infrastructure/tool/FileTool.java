@@ -1,21 +1,13 @@
 package com.example.dolphin.infrastructure.tool;
 
 import cn.hutool.core.io.FileUtil;
-import com.example.dolphin.config.VideoAndAudioHandler;
 import com.example.dolphin.infrastructure.consts.StringPool;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.util.StringUtils;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 
 /**
  * @author 王景阳
@@ -44,25 +36,6 @@ public class FileTool {
         inputStream.close();
         outputStream.flush();
         outputStream.close();
-    }
-
-    public static void downFile(String filePath, VideoAndAudioHandler handler, HttpServletRequest request, HttpServletResponse response) {
-        try {
-            Path path = Paths.get(filePath);
-            if (Files.exists(path)) {
-                String mimeType = Files.probeContentType(path);
-                if (!StringUtils.hasText(mimeType)) {
-                    response.setContentType(mimeType);
-                }
-                request.setAttribute(VideoAndAudioHandler.ATTR_FILE, path);
-                handler.handleRequest(request, response);
-            } else {
-                response.setStatus(HttpServletResponse.SC_NOT_FOUND);
-                response.setCharacterEncoding(StandardCharsets.UTF_8.toString());
-            }
-        } catch (Exception e) {
-            log.error(e.getMessage());
-        }
     }
 
     public static void deleteHeadPortrait(String imageName) {

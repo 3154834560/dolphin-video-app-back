@@ -2,7 +2,7 @@ package com.example.dolphin.application.dto.input;
 
 import com.example.dolphin.domain.entity.User;
 import com.example.dolphin.domain.enums.SexEnum;
-import lombok.*;
+import lombok.Data;
 
 import java.time.LocalDateTime;
 
@@ -11,7 +11,6 @@ import java.time.LocalDateTime;
  * @date 2022/10/29 20:51
  */
 @Data
-@Builder
 public class UserInput {
 
     private String userName;
@@ -39,8 +38,15 @@ public class UserInput {
         user.setPassword(password);
         user.setSex(sex);
         user.setBirthday(birthday);
-        user.setAdmin(isAdmin);
         user.setPhone(phone);
         user.setIntroduction(introduction);
+    }
+
+    public User to() {
+        User user = new User(userName, name, nick, password, sex);
+        user.setBirthday(birthday);
+        user.setPhone(phone);
+        user.setIntroduction(introduction);
+        return user;
     }
 }

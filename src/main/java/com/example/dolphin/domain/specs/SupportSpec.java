@@ -1,6 +1,9 @@
 package com.example.dolphin.domain.specs;
 
 import com.example.dolphin.domain.entity.Support;
+import com.example.dolphin.domain.entity.Support_;
+import com.example.dolphin.domain.entity.User_;
+import com.example.dolphin.domain.entity.Video_;
 import org.springframework.data.jpa.domain.Specification;
 
 import javax.persistence.criteria.Path;
@@ -11,18 +14,31 @@ import javax.persistence.criteria.Predicate;
  * @date 2022/11/11 21:21
  */
 public class SupportSpec {
-
-    private static final String USER_NAME = "userName";
-
-    private static final String VIDEO_ID = "videoId";
-
     public static Specification<Support> exists(String userName, String videoId) {
         return (root, query, cb) -> {
-            Path<Object> userNames = root.get(USER_NAME);
-            Path<Object> videoIds = root.get(VIDEO_ID);
+            Path<String> userNames = root.get(Support_.user).get(User_.userName);
+            Path<String> videoIds = root.get(Support_.video).get(Video_.id);
             Predicate p1 = cb.equal(userNames, userName);
             Predicate p2 = cb.equal(videoIds, videoId);
             return cb.and(p1, p2);
+        };
+    }
+
+    public static Specification<Support> userId(String userId) {
+        return (root, query, cb) -> {
+            if (userId == null) {
+                return cb.disjunction();
+            }
+            return cb.equal(root.get(Support_.user).get(User_.id), userId);
+        };
+    }
+
+    public static Specification<Support> videoId(String videoId) {
+        return (root, query, cb) -> {
+            if (videoId == null) {
+                return cb.disjunction();
+            }
+            return cb.equal(root.get(Support_.video).get(Video_.id), videoId);
         };
     }
 }

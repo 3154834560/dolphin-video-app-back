@@ -26,12 +26,12 @@ public class CommentOutput {
 
     private LocalDateTime creatAt;
 
-    public static CommentOutput of(UserOutput user, Comment comment) {
+    public static CommentOutput of(Comment comment) {
         return new CommentOutput()
                 .setCommentId(comment.getId())
-                .setUserName(user.getUserName())
-                .setNick(user.getNick())
-                .setHeadPortraitUrl(user.getHeadPortraitUrl())
+                .setUserName(comment.getUser().getUserName())
+                .setNick(comment.getUser().getNick())
+                .setHeadPortraitUrl(comment.getUser().getHeadPortraitUrl())
                 .setContent(comment.getContent())
                 .setCreatAt(comment.getCreateAt());
     }

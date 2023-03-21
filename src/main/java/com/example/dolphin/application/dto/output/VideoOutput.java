@@ -51,8 +51,8 @@ public class VideoOutput {
         return new VideoOutput()
                 .setId(video.getId())
                 .setUrl(video.getUrl())
-                .setAuthor(video.getAuthor())
-                .setAuthorNick(video.getAuthorNick())
+                .setAuthor(video.getUser().getUserName())
+                .setAuthorNick(video.getUser().getNick())
                 .setIntroduction(video.getIntroduction())
                 .setCoverUrl(video.getCoverUrl())
                 .setNumbers(video.getNumbers());

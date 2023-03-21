@@ -2,8 +2,6 @@ package com.example.dolphin.application.dto.output;
 
 import com.example.dolphin.domain.entity.User;
 import com.example.dolphin.domain.enums.SexEnum;
-import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
@@ -29,7 +27,6 @@ public class UserOutput {
 
     private SexEnum sex;
 
-  //  @JsonFormat(pattern = "yyyy-MM-dd hh:mm:ss", timezone = "GMT+8")
     private LocalDateTime birthday;
 
     private String phone;
@@ -38,7 +35,7 @@ public class UserOutput {
 
     private boolean isAdmin;
 
-    public static UserOutput of(User user){
+    public static UserOutput of(User user) {
         return new UserOutput()
                 .setUserName(user.getUserName())
                 .setNick(user.getNick())

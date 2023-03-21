@@ -38,7 +38,7 @@ public class CollectionOutput {
     public static CollectionOutput of(Video video, String headPortraitUrl, String nick) {
         return new CollectionOutput()
                 .setVideoId(video.getId())
-                .setAuthor(video.getAuthor())
+                .setAuthor(video.getUser().getUserName())
                 .setHeadPortraitUrl(headPortraitUrl)
                 .setNick(nick)
                 .setCoverUrl(video.getCoverUrl())
