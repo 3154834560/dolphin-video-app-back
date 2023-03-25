@@ -20,9 +20,9 @@ public class ConcernOutput {
 
     public static ConcernOutput of(Concern concern) {
         return new ConcernOutput()
-                .setUserName(concern.getUser().getUserName())
-                .setHeadPortraitUrl(concern.getUser().getHeadPortraitUrl())
-                .setNick(concern.getUser().getNick());
+                .setUserName(concern.getConcernedUser().getUserName())
+                .setHeadPortraitUrl(concern.getConcernedUser().getHeadPortraitUrl())
+                .setNick(concern.getConcernedUser().getNick());
     }
 
 }
