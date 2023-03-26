@@ -1,5 +1,9 @@
 # 海豚视频后端（仿抖音的短视频app）
 
+所用技术：springboot、hibernet、jpamodelgen、sqlite、bytedeco、ffmpeg
+
+------
+
 后端已实现功能：
 
 1. 收藏视频、取消收藏、获取指定用户所有收藏
