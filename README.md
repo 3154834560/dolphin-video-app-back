@@ -1,6 +1,6 @@
 # 海豚视频后端（仿抖音的短视频app）
 
-所用技术：springboot、hibernet、jpamodelgen、sqlite、bytedeco、ffmpeg
+所用技术：springboot、hibernet、jpamodelgen、sqlite、bytedeco、ffmpeg、smart、lombok、hutool
 
 ------
 
