@@ -1,14 +1,12 @@
 package com.example.dolphin.application.service;
 
+import com.example.dolphin.application.dto.input.CommentInput;
 import com.example.dolphin.application.dto.output.CommentOutput;
 import com.example.dolphin.domain.entity.Comment;
-import com.example.dolphin.domain.entity.User;
-import com.example.dolphin.domain.entity.Video;
 import com.example.dolphin.domain.repository.CommentRepository;
 import com.example.dolphin.domain.repository.UserRepository;
 import com.example.dolphin.domain.repository.VideoRepository;
 import com.example.dolphin.domain.specs.CommentSpec;
-import com.example.dolphin.domain.specs.UserSpec;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -36,11 +34,13 @@ public class CommentService {
         return comments.stream().map(CommentOutput::of).collect(Collectors.toList());
     }
 
+    public Integer getCommentCountBy(String videoId) {
+        return repository.findAll(CommentSpec.videoId(videoId)).size();
+    }
+
     @Transactional(rollbackFor = Exception.class)
-    public boolean comment(String userName, String videoId, String content) {
-        User user = userRepository.getBy(UserSpec.userName(userName));
-        Video video = videoRepository.getById(videoId);
-        Comment comment = new Comment(user, video, content);
+    public boolean comment(CommentInput input) {
+        Comment comment = input.to();
         repository.save(comment);
         return true;
     }

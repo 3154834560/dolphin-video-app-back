@@ -1,6 +1,7 @@
 package com.example.dolphin.api;
 
 import com.example.dolphin.acomm.model.rest.R;
+import com.example.dolphin.application.dto.input.CommentInput;
 import com.example.dolphin.application.dto.output.CommentOutput;
 import com.example.dolphin.application.service.CommentService;
 import lombok.RequiredArgsConstructor;
@@ -30,11 +31,19 @@ public class CommentApi {
     }
 
     /**
+     * 获取指定视频评论数量
+     */
+    @GetMapping("/count")
+    public R<Integer> getCommentCount(@RequestParam("videoId") String videoId) {
+        return R.data(commentService.getCommentCountBy(videoId));
+    }
+
+    /**
      * 评论
      */
     @PostMapping
-    public R<Boolean> comment(@RequestParam("userName") String userName, @RequestParam("videoId") String videoId, @RequestParam("content") String content) {
-        return R.data(commentService.comment(userName, videoId, content));
+    public R<Boolean> comment(@RequestBody CommentInput input) {
+        return R.data(commentService.comment(input));
     }
 
     /**

@@ -24,7 +24,7 @@ public class CommentOutput {
 
     private String content;
 
-    private LocalDateTime creatAt;
+    private LocalDateTime createAt;
 
     public static CommentOutput of(Comment comment) {
         return new CommentOutput()
@@ -33,7 +33,7 @@ public class CommentOutput {
                 .setNick(comment.getUser().getNick())
                 .setHeadPortraitUrl(comment.getUser().getHeadPortraitUrl())
                 .setContent(comment.getContent())
-                .setCreatAt(comment.getCreateAt());
+                .setCreateAt(comment.getCreateAt());
     }
 
 }

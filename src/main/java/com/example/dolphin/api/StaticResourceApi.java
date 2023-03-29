@@ -1,6 +1,7 @@
 package com.example.dolphin.api;
 
 import com.example.dolphin.config.MTAppDateTimeConverter;
+import com.example.dolphin.infrastructure.consts.StringPool;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.format.FormatterRegistry;
@@ -25,9 +26,9 @@ public class StaticResourceApi extends WebMvcConfigurationSupport {
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         registry.addResourceHandler("/static/videos/**")
-                .addResourceLocations("file:" + "./data/videos/");
+                .addResourceLocations("file:" + StringPool.VIDEO_RESOURCE_PATH);
         registry.addResourceHandler("/static/images/**")
-                .addResourceLocations("file:" + "./data/images/");
+                .addResourceLocations("file:" + StringPool.IMAGE_RESOURCE_PATH);
     }
 
     @Override

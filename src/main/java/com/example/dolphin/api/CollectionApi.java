@@ -22,7 +22,7 @@ public class CollectionApi {
     private final CollectionService collectionService;
 
     /**
-     * 获取指定用户的所以收藏
+     * 获取指定用户的所有的收藏
      */
     @GetMapping
     public R<List<VideoOutput>> getAllCollect(@RequestParam("userName") String userName) {
