@@ -1,4 +1,4 @@
-package com.example.dolphin.acomm.model.rest;
+package com.example.dolphin.infrastructure.model.rest;
 
 import java.io.Serializable;
 

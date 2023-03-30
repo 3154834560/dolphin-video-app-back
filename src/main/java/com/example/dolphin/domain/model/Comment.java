@@ -1,9 +1,9 @@
-package com.example.dolphin.domain.entity;
+package com.example.dolphin.domain.model;
 
-import com.example.dolphin.acomm.domain.BaseEntity;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -11,12 +11,12 @@ import javax.persistence.ManyToOne;
 
 /**
  * @author 王景阳
- * @date 2022/11/10 18:41
+ * @date 2022/11/10 15:55
  */
 @Getter
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Collection extends BaseEntity {
+public class Comment extends BaseEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     private User user;
@@ -24,8 +24,12 @@ public class Collection extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     private Video video;
 
-    public Collection(User user, Video video) {
+    @Setter
+    private String content;
+
+    public Comment(User user, Video video, String content) {
         this.user = user;
         this.video = video;
+        this.content = content;
     }
 }

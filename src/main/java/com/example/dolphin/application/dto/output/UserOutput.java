@@ -1,9 +1,8 @@
 package com.example.dolphin.application.dto.output;
 
-import com.example.dolphin.domain.entity.User;
 import com.example.dolphin.domain.enums.SexEnum;
+import com.example.dolphin.domain.model.User;
 import lombok.Data;
-import lombok.experimental.Accessors;
 
 import java.time.LocalDateTime;
 
@@ -12,41 +11,51 @@ import java.time.LocalDateTime;
  * @date 2022/11/11 20:39
  */
 @Data
-@Accessors(chain = true)
 public class UserOutput {
-
+    /**
+     *  用户名
+     */
     private String userName;
-
-    private String name;
-
+    /**
+     *  昵称
+     */
     private String nick;
-
+    /**
+     *  密码
+     */
     private String password;
-
-    private String headPortraitUrl;
-
+    /**
+     *  头像名称-带后缀
+     */
+    private String headPortraitName;
+    /**
+     *  性别
+     */
     private SexEnum sex;
-
+    /**
+     *  生日
+     */
     private LocalDateTime birthday;
-
+    /**
+     *  电话
+     */
     private String phone;
-
+    /**
+     *  个人简介
+     */
     private String introduction;
 
-    private boolean isAdmin;
-
     public static UserOutput of(User user) {
-        return new UserOutput()
-                .setUserName(user.getUserName())
-                .setNick(user.getNick())
-                .setName(user.getName())
-                .setPassword(user.getPassword())
-                .setHeadPortraitUrl(user.getHeadPortraitUrl())
-                .setSex(user.getSex())
-                .setBirthday(user.getBirthday())
-                .setPhone(user.getPhone())
-                .setIntroduction(user.getIntroduction())
-                .setAdmin(user.isAdmin());
+        UserOutput output = new UserOutput();
+        output.setUserName(user.getUserName());
+        output.setNick(user.getNick());
+        output.setPassword(user.getPassword());
+        output.setSex(user.getSex());
+        output.setBirthday(user.getBirthday());
+        output.setPhone(user.getPhone());
+        output.setIntroduction(user.getIntroduction());
+        output.setHeadPortraitName(user.getHeadPortraitName());
+        return output;
     }
 
 }

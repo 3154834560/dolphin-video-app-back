@@ -1,7 +1,7 @@
 package com.example.dolphin.config;
 
-import com.example.dolphin.acomm.model.rest.R;
 import com.example.dolphin.infrastructure.exception.DuplicateException;
+import com.example.dolphin.infrastructure.model.rest.R;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -13,6 +13,15 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 @RestControllerAdvice
 @Slf4j
 public class GlobalExceptionHandler {
+
+    /**
+     * ClassCastException 特殊处理
+     */
+    @ExceptionHandler(value = ClassCastException.class)
+    public R<?> onClassCastException(ClassCastException e) {
+        e.printStackTrace();
+        return R.fail("类型转换出错,请检查服务端日志!");
+    }
 
     @ExceptionHandler(value = DuplicateException.class)
     public R<?> onException(Exception e) {
@@ -28,5 +37,4 @@ public class GlobalExceptionHandler {
         log.error("TODO:兜底处理---{}", e.getMessage(), e);
         return R.fail(e.getMessage());
     }
-
 }

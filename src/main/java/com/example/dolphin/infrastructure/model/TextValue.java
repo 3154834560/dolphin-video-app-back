@@ -1,4 +1,4 @@
-package com.example.dolphin.acomm.model;
+package com.example.dolphin.infrastructure.model;
 
 /**
  * TV对

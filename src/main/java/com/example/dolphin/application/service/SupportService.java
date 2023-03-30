@@ -1,7 +1,7 @@
 package com.example.dolphin.application.service;
 
-import com.example.dolphin.domain.entity.Support;
-import com.example.dolphin.domain.entity.Video;
+import com.example.dolphin.domain.model.Support;
+import com.example.dolphin.domain.model.Video;
 import com.example.dolphin.domain.repository.SupportRepository;
 import com.example.dolphin.domain.repository.UserRepository;
 import com.example.dolphin.domain.repository.VideoRepository;
@@ -22,11 +22,12 @@ public class SupportService {
     private final SupportRepository supportRepository;
 
     private final VideoRepository videoRepository;
+
     private final UserRepository userRepository;
 
     @Transactional(rollbackFor = Exception.class)
     public boolean support(String userName, String videoId, int n) {
-        Support support = supportRepository.getBy(SupportSpec.exists(userName, videoId));
+        Support support = supportRepository.getBy(SupportSpec.userNameAndVideoId(userName, videoId));
         Video video = videoRepository.getById(videoId);
         video.setNumbers(video.getNumbers() + n);
         if (support != null) {
@@ -39,6 +40,6 @@ public class SupportService {
     }
 
     public boolean isSupport(String userName, String videoId) {
-        return supportRepository.exists(SupportSpec.exists(userName, videoId));
+        return supportRepository.exists(SupportSpec.userNameAndVideoId(userName, videoId));
     }
 }

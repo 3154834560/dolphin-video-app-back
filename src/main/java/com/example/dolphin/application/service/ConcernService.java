@@ -1,7 +1,7 @@
 package com.example.dolphin.application.service;
 
 import com.example.dolphin.application.dto.output.ConcernOutput;
-import com.example.dolphin.domain.entity.Concern;
+import com.example.dolphin.domain.model.Concern;
 import com.example.dolphin.domain.repository.ConcernRepository;
 import com.example.dolphin.domain.repository.UserRepository;
 import com.example.dolphin.domain.specs.ConcernSpec;

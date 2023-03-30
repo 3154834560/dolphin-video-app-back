@@ -4,7 +4,6 @@ import cn.hutool.core.io.FileUtil;
 import com.example.dolphin.infrastructure.consts.StringPool;
 import lombok.extern.slf4j.Slf4j;
 
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -21,9 +20,8 @@ public class FileTool {
     }
 
     public static void deleteFile(String filePath) {
-        File file = new File(filePath);
-        if (!filePath.endsWith(StringPool.DEFAULT_IMAGE_NAME) && file.exists()) {
-            FileUtil.del(file);
+        if (!filePath.endsWith(StringPool.DEFAULT_IMAGE_NAME)) {
+            FileUtil.del(filePath);
         }
     }
 
@@ -38,10 +36,15 @@ public class FileTool {
         outputStream.close();
     }
 
-    public static void deleteHeadPortrait(String imageName) {
-        if (!imageName.equals(StringPool.DEFAULT_IMAGE_NAME)) {
+    public static void deleteImage(String imageName) {
+        if (!StringPool.DEFAULT_IMAGE_NAME.equals(imageName)) {
             String imagePath = StringPool.IMAGE_RESOURCE_PATH + imageName;
             FileTool.deleteFile(imagePath);
         }
+    }
+
+    public static void deleteVideo(String videoName) {
+        String videoPath = StringPool.VIDEO_RESOURCE_PATH + videoName;
+        FileTool.deleteFile(videoPath);
     }
 }

@@ -1,7 +1,7 @@
 package com.example.dolphin.domain.repository;
 
-import com.example.dolphin.acomm.infrastructure.AppException;
-import com.example.dolphin.acomm.model.PageOutput;
+import com.example.dolphin.infrastructure.model.PageOutput;
+import com.example.dolphin.infrastructure.exception.AppException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
@@ -59,5 +59,4 @@ public interface BaseRepository<T> extends JpaRepository<T, String>, JpaSpecific
         Page<U> page = this.findAll(spec, pageable).map(converter);
         return BaseRepository.of(page);
     }
-
 }

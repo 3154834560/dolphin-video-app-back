@@ -1,4 +1,4 @@
-package com.example.dolphin.acomm.infrastructure.support;
+package com.example.dolphin.infrastructure.support;
 
 
 import cn.hutool.core.lang.Snowflake;
@@ -16,7 +16,7 @@ import java.io.Serializable;
  * @date 2022-01-13 11:27
  */
 public class SnowflakeIdGenerator implements IdentifierGenerator {
-    public final static String TYPE = "com.example.dolphin.acomm.infrastructure.support.SnowflakeIdGenerator";
+    public final static String TYPE = "com.example.dolphin.infrastructure.support.SnowflakeIdGenerator";
 
     final static Snowflake SNOWFLAKE = IdUtil.getSnowflake();
 

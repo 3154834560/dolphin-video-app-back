@@ -1,9 +1,9 @@
 package com.example.dolphin.domain.specs;
 
-import com.example.dolphin.domain.entity.Collection;
-import com.example.dolphin.domain.entity.Collection_;
-import com.example.dolphin.domain.entity.User_;
-import com.example.dolphin.domain.entity.Video_;
+import com.example.dolphin.domain.model.Collection;
+import com.example.dolphin.domain.model.Collection_;
+import com.example.dolphin.domain.model.User_;
+import com.example.dolphin.domain.model.Video_;
 import org.springframework.data.jpa.domain.Specification;
 
 /**

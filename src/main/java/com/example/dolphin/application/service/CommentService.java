@@ -2,7 +2,7 @@ package com.example.dolphin.application.service;
 
 import com.example.dolphin.application.dto.input.CommentInput;
 import com.example.dolphin.application.dto.output.CommentOutput;
-import com.example.dolphin.domain.entity.Comment;
+import com.example.dolphin.domain.model.Comment;
 import com.example.dolphin.domain.repository.CommentRepository;
 import com.example.dolphin.domain.repository.UserRepository;
 import com.example.dolphin.domain.repository.VideoRepository;

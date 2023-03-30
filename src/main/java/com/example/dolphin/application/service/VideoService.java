@@ -2,8 +2,8 @@ package com.example.dolphin.application.service;
 
 import com.example.dolphin.application.dto.input.VideoInput;
 import com.example.dolphin.application.dto.output.VideoOutput;
-import com.example.dolphin.domain.entity.User;
-import com.example.dolphin.domain.entity.Video;
+import com.example.dolphin.domain.model.User;
+import com.example.dolphin.domain.model.Video;
 import com.example.dolphin.domain.repository.*;
 import com.example.dolphin.domain.specs.*;
 import com.example.dolphin.infrastructure.consts.StringPool;
@@ -67,32 +67,9 @@ public class VideoService {
         return content.stream().map(VideoOutput::of).collect(Collectors.toList());
     }
 
-    @Transactional(rollbackFor = Exception.class)
-    public boolean uploadVideo(String userName, String introduction, Part video, Part cover) {
-        String oldVideoName = video.getSubmittedFileName();
-        String oldCoverName = cover == null ? oldVideoName : cover.getSubmittedFileName();
-        String newVideoName = System.currentTimeMillis() + FileTool.getType(oldVideoName);
-        String newCoverName = cover == null ? System.currentTimeMillis() + StringPool.DOT + imageType : System.currentTimeMillis() + FileTool.getType(oldCoverName);
-        try {
-            video.write(StringPool.VIDEO_SLASH + newVideoName);
-            if (cover != null) {
-                cover.write(StringPool.IMAGE_SLASH + newCoverName);
-            } else {
-                String newVideoPath = StringPool.VIDEO_RESOURCE_PATH + newVideoName;
-                String newCoverPath = StringPool.IMAGE_RESOURCE_PATH + newCoverName;
-                VideoTool.getVideoFirstImg(newVideoPath, newCoverPath, imageType, rotateAngle);
-            }
-            save(userName, introduction, newVideoName, newCoverName);
-        } catch (Exception e) {
-            FileTool.deleteFile(StringPool.VIDEO_RESOURCE_PATH + newVideoName);
-            FileTool.deleteFile(StringPool.IMAGE_RESOURCE_PATH + newCoverName);
-            e.printStackTrace();
-            return false;
-        }
-        return true;
-    }
-
-
+    /**
+     * 分块上传视频
+     */
     @Transactional(rollbackFor = Exception.class)
     public boolean uploadVideo(String videoInputStr, Part video, Part cover) {
         ObjectMapper objectMapper = new ObjectMapper();
@@ -105,8 +82,30 @@ public class VideoService {
         if (video == null) {
             return true;
         }
-        String videoPath = StringPool.VIDEO_RESOURCE_PATH + videoInput.getVideoName();
-        String coverPath = StringPool.IMAGE_RESOURCE_PATH + videoInput.getCoverName(imageType);
+        return saveVideoAndCover(videoInput, video, cover);
+    }
+
+    @Transactional(rollbackFor = Exception.class)
+    public boolean deleteBy(String videoId) {
+        Video video = videoRepository.getById(videoId);
+        deleteVideo(video);
+        return true;
+    }
+
+    @Transactional(rollbackFor = Exception.class)
+    public VideoOutput update(String videoId, String introduction) {
+        Video video = videoRepository.getById(videoId);
+        video.setIntroduction(introduction);
+        return VideoOutput.of(video);
+    }
+
+    public VideoOutput getById(String id) {
+        return VideoOutput.of(videoRepository.getById(id));
+    }
+
+    private boolean saveVideoAndCover(VideoInput videoInput, Part video, Part cover) {
+        String videoPath = videoInput.getVideoPath();
+        String coverPath = videoInput.getCoverPath(imageType);
         try {
             InputStream videoInputStream = video.getInputStream();
             FileOutputStream videoOutputStream = new FileOutputStream(new File(videoPath), true);
@@ -130,25 +129,6 @@ public class VideoService {
         return true;
     }
 
-
-    @Transactional(rollbackFor = Exception.class)
-    public boolean deleteBy(String videoId) {
-        Video video = videoRepository.getById(videoId);
-        deleteVideo(video);
-        return true;
-    }
-
-    @Transactional(rollbackFor = Exception.class)
-    public VideoOutput update(String videoId, String introduction) {
-        Video video = videoRepository.getById(videoId);
-        video.setIntroduction(introduction);
-        return VideoOutput.of(video);
-    }
-
-    public VideoOutput getById(String id) {
-        return VideoOutput.of(videoRepository.getById(id));
-    }
-
     private void save(String userName, String introduction, String videoName, String coverName) {
         User user = userRepository.getBy(UserSpec.userName(userName));
         Video video = new Video(user, videoName, coverName, introduction);
@@ -160,9 +140,7 @@ public class VideoService {
         commentRepository.delete(commentRepository.getBy(CommentSpec.videoId(video.getId())));
         supportRepository.delete(supportRepository.getBy(SupportSpec.videoId(video.getId())));
         videoRepository.delete(video);
-        String videoPath = StringPool.VIDEO_RESOURCE_PATH + video.getVideoName();
-        String coverPath = StringPool.IMAGE_RESOURCE_PATH + video.getCoverName();
-        FileTool.deleteFile(videoPath);
-        FileTool.deleteFile(coverPath);
+        FileTool.deleteVideo(video.getVideoName());
+        FileTool.deleteImage(video.getCoverName());
     }
 }

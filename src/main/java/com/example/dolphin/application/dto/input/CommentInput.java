@@ -1,10 +1,10 @@
 package com.example.dolphin.application.dto.input;
 
-import com.example.dolphin.acomm.infrastructure.IocUtil;
-import com.example.dolphin.domain.entity.Comment;
+import com.example.dolphin.domain.model.Comment;
 import com.example.dolphin.domain.repository.UserRepository;
 import com.example.dolphin.domain.repository.VideoRepository;
 import com.example.dolphin.domain.specs.UserSpec;
+import com.example.dolphin.infrastructure.utils.IocUtil;
 import lombok.Data;
 
 /**
@@ -13,11 +13,17 @@ import lombok.Data;
  */
 @Data
 public class CommentInput {
-
+    /**
+     * 用户名
+     */
     private String userName;
-
+    /**
+     * 视频id
+     */
     private String videoId;
-
+    /**
+     * 评论内容
+     */
     private String content;
 
     public Comment to() {

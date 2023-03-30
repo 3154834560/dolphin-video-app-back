@@ -1,6 +1,5 @@
-package com.example.dolphin.domain.entity;
+package com.example.dolphin.domain.model;
 
-import com.example.dolphin.acomm.domain.BaseEntity;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -11,23 +10,21 @@ import javax.persistence.ManyToOne;
 
 /**
  * @author 王景阳
- * @date 2022/11/11 21:19
+ * @date 2022/11/10 18:31
  */
-
 @Getter
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Support extends BaseEntity {
+public class Concern extends BaseEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     private User user;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    private Video video;
+    private User concernedUser;
 
-    public Support(Video video, User user) {
-        this.video = video;
+    public Concern(User user, User concernedUser) {
         this.user = user;
+        this.concernedUser = concernedUser;
     }
-
 }

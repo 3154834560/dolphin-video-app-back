@@ -2,7 +2,7 @@ package com.example.dolphin.application.service;
 
 
 import com.example.dolphin.application.dto.output.VideoOutput;
-import com.example.dolphin.domain.entity.Collection;
+import com.example.dolphin.domain.model.Collection;
 import com.example.dolphin.domain.repository.CollectionRepository;
 import com.example.dolphin.domain.repository.UserRepository;
 import com.example.dolphin.domain.repository.VideoRepository;

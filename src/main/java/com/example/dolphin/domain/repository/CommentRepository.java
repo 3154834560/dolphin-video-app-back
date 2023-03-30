@@ -1,6 +1,6 @@
 package com.example.dolphin.domain.repository;
 
-import com.example.dolphin.domain.entity.Comment;
+import com.example.dolphin.domain.model.Comment;
 
 /**
  * @author 王景阳

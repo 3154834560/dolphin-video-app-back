@@ -1,4 +1,4 @@
-package com.example.dolphin.acomm.infrastructure;
+package com.example.dolphin.infrastructure.utils;
 
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;

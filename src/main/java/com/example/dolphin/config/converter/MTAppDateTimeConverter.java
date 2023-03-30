@@ -1,4 +1,4 @@
-package com.example.dolphin.config;
+package com.example.dolphin.config.converter;
 
 import org.springframework.core.convert.TypeDescriptor;
 import org.springframework.core.convert.converter.GenericConverter;
@@ -14,8 +14,8 @@ import java.util.Set;
  * 自定义DateTime转换器,目前仅提供 (Long/String->LocalDateTime)
  * 仅适用于PathVariable和RequestParam
  *
- * @author ankelen
- * @date 2022-10-31 14:34
+ * @author 王景阳
+ * @date 2022/11/10 18:48
  */
 public class MTAppDateTimeConverter implements GenericConverter {
     @Override

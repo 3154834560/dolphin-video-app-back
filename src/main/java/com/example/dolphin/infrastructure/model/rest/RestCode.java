@@ -1,4 +1,4 @@
-package com.example.dolphin.acomm.model.rest;
+package com.example.dolphin.infrastructure.model.rest;
 
 /**
  * 自定义响应码实现(最简)

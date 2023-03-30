@@ -1,6 +1,6 @@
 package com.example.dolphin.api;
 
-import com.example.dolphin.acomm.model.rest.R;
+import com.example.dolphin.infrastructure.model.rest.R;
 import com.example.dolphin.application.dto.output.VideoOutput;
 import com.example.dolphin.application.service.VideoService;
 import lombok.RequiredArgsConstructor;
@@ -45,14 +45,6 @@ public class VideoApi {
     @GetMapping("/random/{index}")
     public R<List<VideoOutput>> randomGet(@PathVariable("index") int index) {
         return R.data(service.randomGet(index));
-    }
-
-    /**
-     * 上传视频
-     */
-    @PostMapping
-    public R<Boolean> uploadVideo(@RequestParam("userName") String userName, @RequestParam("introduction") String introduction, @RequestPart("video") Part video, @RequestPart(name = "cover", required = false) Part cover) {
-        return R.data(service.uploadVideo(userName, introduction, video, cover));
     }
 
     /**

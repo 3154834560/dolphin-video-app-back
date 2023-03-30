@@ -1,9 +1,9 @@
 package com.example.dolphin.domain.specs;
 
-import com.example.dolphin.domain.entity.Support;
-import com.example.dolphin.domain.entity.Support_;
-import com.example.dolphin.domain.entity.User_;
-import com.example.dolphin.domain.entity.Video_;
+import com.example.dolphin.domain.model.Support;
+import com.example.dolphin.domain.model.Support_;
+import com.example.dolphin.domain.model.User_;
+import com.example.dolphin.domain.model.Video_;
 import org.springframework.data.jpa.domain.Specification;
 
 import javax.persistence.criteria.Path;
@@ -14,7 +14,7 @@ import javax.persistence.criteria.Predicate;
  * @date 2022/11/11 21:21
  */
 public class SupportSpec {
-    public static Specification<Support> exists(String userName, String videoId) {
+    public static Specification<Support> userNameAndVideoId(String userName, String videoId) {
         return (root, query, cb) -> {
             Path<String> userNames = root.get(Support_.user).get(User_.userName);
             Path<String> videoIds = root.get(Support_.video).get(Video_.id);

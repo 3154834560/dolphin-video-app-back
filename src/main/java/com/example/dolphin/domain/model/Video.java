@@ -1,7 +1,5 @@
-package com.example.dolphin.domain.entity;
+package com.example.dolphin.domain.model;
 
-import com.example.dolphin.acomm.domain.BaseEntity;
-import com.example.dolphin.infrastructure.consts.StringPool;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -21,28 +19,16 @@ import javax.persistence.ManyToOne;
 public class Video extends BaseEntity {
     public Video(User user, String videoName, String coverName, String introduction) {
         this.user = user;
-        this.url = StringPool.VIDEO_URL + videoName;
         this.videoName = videoName;
-        this.coverUrl = StringPool.IMAGE_URL + coverName;
         this.coverName = coverName;
         this.introduction = introduction;
         this.numbers = 0;
     }
 
     /**
-     * 视频播放Url
-     */
-    private String url;
-
-    /**
      * 视频名
      */
     private String videoName;
-
-    /**
-     * 视频封面
-     */
-    private String coverUrl;
 
     /**
      * 视频封面名

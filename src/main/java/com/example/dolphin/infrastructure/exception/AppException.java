@@ -1,4 +1,4 @@
-package com.example.dolphin.acomm.infrastructure;
+package com.example.dolphin.infrastructure.exception;
 
 /**
  * 基本异常

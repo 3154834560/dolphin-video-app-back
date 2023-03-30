@@ -1,6 +1,6 @@
 package com.example.dolphin.api;
 
-import com.example.dolphin.acomm.model.rest.R;
+import com.example.dolphin.infrastructure.model.rest.R;
 import com.example.dolphin.application.dto.input.CommentInput;
 import com.example.dolphin.application.dto.output.CommentOutput;
 import com.example.dolphin.application.service.CommentService;

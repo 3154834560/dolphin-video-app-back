@@ -1,6 +1,6 @@
 package com.example.dolphin.api;
 
-import com.example.dolphin.config.MTAppDateTimeConverter;
+import com.example.dolphin.config.converter.MTAppDateTimeConverter;
 import com.example.dolphin.infrastructure.consts.StringPool;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
@@ -40,7 +40,6 @@ public class StaticResourceApi extends WebMvcConfigurationSupport {
     @Autowired(required = false)
     private MappingJackson2HttpMessageConverter mappingJackson2HttpMessageConverter;
 
-
     @Override
     public void extendMessageConverters(List<HttpMessageConverter<?>> converters) {
         converters.removeIf(converter -> converter instanceof MappingJackson2HttpMessageConverter);
@@ -49,6 +48,5 @@ public class StaticResourceApi extends WebMvcConfigurationSupport {
         } else {
             converters.add(0, mappingJackson2HttpMessageConverter);
         }
-
     }
 }

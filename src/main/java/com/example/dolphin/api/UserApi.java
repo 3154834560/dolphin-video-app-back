@@ -1,12 +1,13 @@
 package com.example.dolphin.api;
 
-import com.example.dolphin.acomm.model.rest.R;
 import com.example.dolphin.application.dto.input.UserInput;
 import com.example.dolphin.application.dto.output.UserOutput;
 import com.example.dolphin.application.service.UserService;
+import com.example.dolphin.infrastructure.model.rest.R;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.Part;
 import java.util.List;
 
 
@@ -48,6 +49,14 @@ public class UserApi {
     }
 
     /**
+     * 更新用户头像
+     */
+    @PutMapping("/head/portrait")
+    public R<String> updateHeadPortrait(@RequestParam("userName") String userName, @RequestPart(name = "image") Part image) {
+        return R.data(service.updateHeadPortraitBy(userName, image));
+    }
+
+    /**
      * 获取指定用户
      */
     @GetMapping
@@ -56,7 +65,7 @@ public class UserApi {
     }
 
     /**
-     * 验证密码
+     * 验证密码，返回0表示当前用户不存在，返回1表示密码错误，返回2表示密码正确
      */
     @GetMapping("/verify")
     public R<Integer> verify(@RequestParam("userName") String userName, @RequestParam("password") String password) {

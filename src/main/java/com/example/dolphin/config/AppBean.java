@@ -1,6 +1,6 @@
 package com.example.dolphin.config;
 
-import com.example.dolphin.acomm.infrastructure.IocUtil;
+import com.example.dolphin.infrastructure.utils.IocUtil;
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.DeserializationContext;

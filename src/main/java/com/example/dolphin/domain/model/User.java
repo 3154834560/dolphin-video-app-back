@@ -1,16 +1,12 @@
-package com.example.dolphin.domain.entity;
+package com.example.dolphin.domain.model;
 
-import com.example.dolphin.acomm.domain.BaseEntity;
 import com.example.dolphin.domain.enums.SexEnum;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
-import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -25,19 +21,16 @@ import java.time.LocalDateTime;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class User extends BaseEntity {
 
-    public User(String userName, String name, String nick, String password, SexEnum sex) {
+    public User(String userName, String nick, String password, SexEnum sex) {
         this.userName = userName;
-        this.name = name;
         this.nick = nick;
         this.password = password;
         this.sex = sex;
     }
 
+    @Column(unique = true)
     @Setter
     private String userName;
-
-    @Setter
-    private String name;
 
     @Setter
     private String nick;
@@ -46,16 +39,14 @@ public class User extends BaseEntity {
     private String password;
 
     @Setter
-    private String headPortraitUrl;
-
-    @Setter
     private String headPortraitName;
 
     @Setter
     @Enumerated(value = EnumType.STRING)
     private SexEnum sex;
-    @JsonDeserialize(using = LocalDateTimeDeserializer.class)
-    @JsonSerialize(using = LocalDateTimeSerializer.class)
+
+    //    @JsonDeserialize(using = LocalDateTimeDeserializer.class)
+    //    @JsonSerialize(using = LocalDateTimeSerializer.class)
     @Setter
     private LocalDateTime birthday;
 
@@ -64,6 +55,4 @@ public class User extends BaseEntity {
 
     @Setter
     private String introduction;
-
-    private boolean isAdmin;
 }

@@ -1,4 +1,4 @@
-package com.example.dolphin.acomm.model;
+package com.example.dolphin.infrastructure.model;
 
 /**
  * 时间段(时间戳格式)

@@ -1,6 +1,6 @@
 package com.example.dolphin.domain.repository;
 
-import com.example.dolphin.domain.entity.User;
+import com.example.dolphin.domain.model.User;
 
 /**
  * @author 王景阳

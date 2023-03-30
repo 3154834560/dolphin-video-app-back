@@ -1,6 +1,6 @@
 package com.example.dolphin.domain.repository;
 
-import com.example.dolphin.domain.entity.Video;
+import com.example.dolphin.domain.model.Video;
 
 /**
  * @author 王景阳

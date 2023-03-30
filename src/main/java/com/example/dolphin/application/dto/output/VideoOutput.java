@@ -1,44 +1,38 @@
 package com.example.dolphin.application.dto.output;
 
-import com.example.dolphin.domain.entity.Video;
+import com.example.dolphin.domain.model.Video;
 import lombok.Data;
-import lombok.experimental.Accessors;
 
 /**
  * @author 王景阳
  * @date 2022/11/11 20:47
  */
 @Data
-@Accessors(chain = true)
 public class VideoOutput {
-
-    private String id;
-
     /**
-     * 视频播放Url
+     * 视频id
      */
-    private String url;
-
+    private String id;
+    /**
+     * 视频名称
+     */
+    private String videoName;
     /**
      * 视频作者，对应用户名
      */
     private String author;
-
     /**
      * 视频作者昵称
      */
     private String authorNick;
-
     /**
      * 视频简介
      */
     private String introduction;
-
     /**
-     * 视频封面
+     * 视频封面名
      */
-    private String coverUrl;
-
+    private String coverName;
     /**
      * 点赞数
      */
@@ -48,13 +42,14 @@ public class VideoOutput {
         if (video == null) {
             return null;
         }
-        return new VideoOutput()
-                .setId(video.getId())
-                .setUrl(video.getUrl())
-                .setAuthor(video.getUser().getUserName())
-                .setAuthorNick(video.getUser().getNick())
-                .setIntroduction(video.getIntroduction())
-                .setCoverUrl(video.getCoverUrl())
-                .setNumbers(video.getNumbers());
+        VideoOutput output = new VideoOutput();
+        output.setId(video.getId());
+        output.setAuthor(video.getUser().getUserName());
+        output.setAuthorNick(video.getUser().getNick());
+        output.setIntroduction(video.getIntroduction());
+        output.setNumbers(video.getNumbers());
+        output.setCoverName(video.getCoverName());
+        output.setVideoName(video.getVideoName());
+        return output;
     }
 }

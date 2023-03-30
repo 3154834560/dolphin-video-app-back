@@ -1,28 +1,33 @@
 package com.example.dolphin.application.dto.output;
 
-import com.example.dolphin.domain.entity.Concern;
+import com.example.dolphin.domain.model.Concern;
 import lombok.Data;
-import lombok.experimental.Accessors;
 
 /**
  * @author 王景阳
  * @date 2022/11/10 21:08
  */
 @Data
-@Accessors(chain = true)
 public class ConcernOutput {
-
+    /**
+     *  用户名
+     */
     private String userName;
-
-    private String headPortraitUrl;
-
+    /**
+     *  头像名称-带后缀
+     */
+    private String headPortraitName;
+    /**
+     *  昵称
+     */
     private String nick;
 
     public static ConcernOutput of(Concern concern) {
-        return new ConcernOutput()
-                .setUserName(concern.getConcernedUser().getUserName())
-                .setHeadPortraitUrl(concern.getConcernedUser().getHeadPortraitUrl())
-                .setNick(concern.getConcernedUser().getNick());
+        ConcernOutput output = new ConcernOutput();
+        output.setUserName(concern.getConcernedUser().getUserName());
+        output.setHeadPortraitName(concern.getConcernedUser().getHeadPortraitName());
+        output.setNick(concern.getConcernedUser().getNick());
+        return output;
     }
 
 }

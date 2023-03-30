@@ -1,8 +1,8 @@
 package com.example.dolphin.domain.specs;
 
-import com.example.dolphin.domain.entity.Concern;
-import com.example.dolphin.domain.entity.Concern_;
-import com.example.dolphin.domain.entity.User_;
+import com.example.dolphin.domain.model.Concern;
+import com.example.dolphin.domain.model.Concern_;
+import com.example.dolphin.domain.model.User_;
 import org.springframework.data.jpa.domain.Specification;
 
 /**
@@ -18,6 +18,16 @@ public class ConcernSpec {
             return cb.equal(root.get(Concern_.user).get(User_.id), userId);
         };
     }
+
+    public static Specification<Concern> concernedUseId(String userId) {
+        return (root, query, cb) -> {
+            if (userId == null) {
+                return cb.disjunction();
+            }
+            return cb.equal(root.get(Concern_.concernedUser).get(User_.id), userId);
+        };
+    }
+
     public static Specification<Concern> userName(String userName) {
         return (root, query, cb) -> {
             if (userName == null) {

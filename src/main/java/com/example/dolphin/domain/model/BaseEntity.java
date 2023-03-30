@@ -1,6 +1,6 @@
-package com.example.dolphin.acomm.domain;
+package com.example.dolphin.domain.model;
 
-import com.example.dolphin.acomm.infrastructure.support.SnowflakeIdGenerator;
+import com.example.dolphin.infrastructure.support.SnowflakeIdGenerator;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.UpdateTimestamp;
