@@ -1,8 +1,9 @@
 package com.example.dolphin.api;
 
-import com.example.dolphin.infrastructure.model.rest.R;
+import com.example.dolphin.application.dto.output.VideoListOutput;
 import com.example.dolphin.application.dto.output.VideoOutput;
 import com.example.dolphin.application.service.VideoService;
+import com.example.dolphin.infrastructure.model.rest.R;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -27,7 +28,7 @@ public class VideoApi {
      * 获取指定用户的视频
      */
     @GetMapping("/all")
-    public R<List<VideoOutput>> getAll(@RequestParam("userName") String userName) {
+    public R<List<VideoListOutput>> getAll(@RequestParam("userName") String userName) {
         return R.data(service.getAllBy(userName));
     }
 

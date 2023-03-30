@@ -1,6 +1,7 @@
 package com.example.dolphin.application.service;
 
 import com.example.dolphin.application.dto.input.VideoInput;
+import com.example.dolphin.application.dto.output.VideoListOutput;
 import com.example.dolphin.application.dto.output.VideoOutput;
 import com.example.dolphin.domain.model.User;
 import com.example.dolphin.domain.model.Video;
@@ -57,8 +58,8 @@ public class VideoService {
 
     private final CommentRepository commentRepository;
 
-    public List<VideoOutput> getAllBy(String userName) {
-        return videoRepository.findAll(VideoSpec.userName(userName)).stream().map(VideoOutput::of).collect(Collectors.toList());
+    public List<VideoListOutput> getAllBy(String userName) {
+        return videoRepository.findAll(VideoSpec.userName(userName)).stream().map(VideoListOutput::of).collect(Collectors.toList());
     }
 
     public List<VideoOutput> randomGet(int index) {
