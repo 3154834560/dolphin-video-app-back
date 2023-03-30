@@ -4,8 +4,6 @@ import com.example.dolphin.application.dto.input.CommentInput;
 import com.example.dolphin.application.dto.output.CommentOutput;
 import com.example.dolphin.domain.model.Comment;
 import com.example.dolphin.domain.repository.CommentRepository;
-import com.example.dolphin.domain.repository.UserRepository;
-import com.example.dolphin.domain.repository.VideoRepository;
 import com.example.dolphin.domain.specs.CommentSpec;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -24,10 +22,6 @@ import java.util.stream.Collectors;
 public class CommentService {
 
     private final CommentRepository repository;
-
-    private final UserRepository userRepository;
-
-    private final VideoRepository videoRepository;
 
     public List<CommentOutput> getAllComment(String videoId) {
         List<Comment> comments = repository.findAll(CommentSpec.videoId(videoId));

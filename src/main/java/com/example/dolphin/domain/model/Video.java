@@ -46,7 +46,9 @@ public class Video extends BaseEntity {
      */
     @Setter
     private long numbers;
-
+    /**
+     * 所属用户
+     */
     @ManyToOne(fetch = FetchType.LAZY)
     private User user;
 }

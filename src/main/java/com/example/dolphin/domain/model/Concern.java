@@ -16,10 +16,14 @@ import javax.persistence.ManyToOne;
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Concern extends BaseEntity {
-
+    /**
+     * 用户
+     */
     @ManyToOne(fetch = FetchType.LAZY)
     private User user;
-
+    /**
+     * 关注的用户
+     */
     @ManyToOne(fetch = FetchType.LAZY)
     private User concernedUser;
 

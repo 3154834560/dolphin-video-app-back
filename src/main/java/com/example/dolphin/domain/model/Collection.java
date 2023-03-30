@@ -16,10 +16,14 @@ import javax.persistence.ManyToOne;
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Collection extends BaseEntity {
-
+    /**
+     * 用户
+     */
     @ManyToOne(fetch = FetchType.LAZY)
     private User user;
-
+    /**
+     * 视频
+     */
     @ManyToOne(fetch = FetchType.LAZY)
     private Video video;
 

@@ -27,32 +27,48 @@ public class User extends BaseEntity {
         this.password = password;
         this.sex = sex;
     }
-
+    /**
+     * 用户名
+     */
     @Column(unique = true)
     @Setter
     private String userName;
-
+    /**
+     * 昵称
+     */
     @Setter
     private String nick;
-
+    /**
+     * 密码
+     */
     @Setter
     private String password;
-
+    /**
+     * 头像名称-带后缀
+     */
     @Setter
     private String headPortraitName;
-
+    /**
+     * 性别
+     */
     @Setter
     @Enumerated(value = EnumType.STRING)
     private SexEnum sex;
-
+    /**
+     * 生日
+     */
     //    @JsonDeserialize(using = LocalDateTimeDeserializer.class)
     //    @JsonSerialize(using = LocalDateTimeSerializer.class)
     @Setter
     private LocalDateTime birthday;
-
+    /**
+     * 电话
+     */
     @Setter
     private String phone;
-
+    /**
+     * 个人简介
+     */
     @Setter
     private String introduction;
 }

@@ -17,13 +17,19 @@ import javax.persistence.ManyToOne;
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Comment extends BaseEntity {
-
+    /**
+     * 用户
+     */
     @ManyToOne(fetch = FetchType.LAZY)
     private User user;
-
+    /**
+     * 视频
+     */
     @ManyToOne(fetch = FetchType.LAZY)
     private Video video;
-
+    /**
+     * 评论内容
+     */
     @Setter
     private String content;
 
