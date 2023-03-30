@@ -1,7 +1,7 @@
 package com.example.dolphin.application.service;
 
 
-import com.example.dolphin.application.dto.output.VideoOutput;
+import com.example.dolphin.application.dto.output.CollectionOutput;
 import com.example.dolphin.domain.model.Collection;
 import com.example.dolphin.domain.repository.CollectionRepository;
 import com.example.dolphin.domain.repository.UserRepository;
@@ -30,9 +30,9 @@ public class CollectionService {
 
     private final VideoRepository videoRepository;
 
-    public List<VideoOutput> getAllCollection(String userName) {
+    public List<CollectionOutput> getAllCollection(String userName) {
         List<Collection> collections = repository.findAll(CollectionSpec.userName(userName));
-        return collections.stream().map(c -> VideoOutput.of(c.getVideo())).collect(Collectors.toList());
+        return collections.stream().map(c -> CollectionOutput.of(c.getVideo())).collect(Collectors.toList());
     }
 
     @Transactional(rollbackFor = Exception.class)

@@ -29,18 +29,15 @@ public class Video extends BaseEntity {
      * 视频名
      */
     private String videoName;
-
     /**
      * 视频封面名
      */
     private String coverName;
-
     /**
      * 视频简介
      */
     @Setter
     private String introduction;
-
     /**
      * 点赞数
      */

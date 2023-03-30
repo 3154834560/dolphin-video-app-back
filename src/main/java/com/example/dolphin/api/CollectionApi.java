@@ -1,5 +1,6 @@
 package com.example.dolphin.api;
 
+import com.example.dolphin.application.dto.output.CollectionOutput;
 import com.example.dolphin.infrastructure.model.rest.R;
 import com.example.dolphin.application.dto.output.VideoOutput;
 import com.example.dolphin.application.service.CollectionService;
@@ -25,7 +26,7 @@ public class CollectionApi {
      * 获取指定用户的所有的收藏
      */
     @GetMapping
-    public R<List<VideoOutput>> getAllCollect(@RequestParam("userName") String userName) {
+    public R<List<CollectionOutput>> getAllCollect(@RequestParam("userName") String userName) {
         return R.data(collectionService.getAllCollection(userName));
     }
 
