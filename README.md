@@ -3,7 +3,7 @@
 所用技术：springboot、hibernet、jpamodelgen、sqlite、bytedeco、ffmpeg、smart-doc插件、lombok、hutool
 ------
 
-[android代码地址]: https://github.com/3154834560/dolphin-video-app.git
+android代码地址: https://github.com/3154834560/dolphin-video-app.git
 
 ------
 
