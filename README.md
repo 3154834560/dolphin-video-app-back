@@ -1,7 +1,9 @@
 # 海豚视频后端（仿抖音的短视频app）
 
 所用技术：springboot、hibernet、jpamodelgen、sqlite、bytedeco、ffmpeg、smart-doc插件、lombok、hutool
+------
 
+[android代码地址]: https://github.com/3154834560/dolphin-video-app.git
 ------
 
 后端已实现功能：
