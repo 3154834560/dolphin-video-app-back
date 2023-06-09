@@ -45,7 +45,7 @@ public class CollectionService {
     @Transactional(rollbackFor = Exception.class)
     public boolean unCollection(String userName, String videoId) {
         Collection collection = repository.getBy(CollectionSpec.userName(userName).and(CollectionSpec.videoId(videoId)));
-        repository.delete(collection);
+        repository.del(collection);
         return true;
     }
 }

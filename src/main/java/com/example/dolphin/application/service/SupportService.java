@@ -31,7 +31,7 @@ public class SupportService {
         Video video = videoRepository.getById(videoId);
         video.setNumbers(video.getNumbers() + n);
         if (support != null) {
-            supportRepository.delete(support);
+            supportRepository.del(support);
         } else {
             support = new Support(video, userRepository.getBy(UserSpec.userName(userName)));
             supportRepository.save(support);

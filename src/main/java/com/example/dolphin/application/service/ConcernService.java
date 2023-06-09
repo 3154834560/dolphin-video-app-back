@@ -41,7 +41,7 @@ public class ConcernService {
     @Transactional(rollbackFor = Exception.class)
     public boolean unconcern(String userName, String concernedUserName) {
         Concern concern = concernRepository.getBy(ConcernSpec.userName(userName).and(ConcernSpec.concernedUserName(concernedUserName)));
-        concernRepository.delete(concern);
+        concernRepository.del(concern);
         return true;
     }
 }

@@ -44,6 +44,12 @@ public interface BaseRepository<T> extends JpaRepository<T, String>, JpaSpecific
         return all.get(0);
     }
 
+    default void del(T entity) {
+        if (entity != null) {
+            this.delete(entity);
+        }
+    }
+
     default boolean delById(@NonNull String id) {
         this.deleteById(id);
         return true;

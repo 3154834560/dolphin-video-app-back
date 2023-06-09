@@ -88,7 +88,7 @@ public class UserService {
     public boolean deleteBy(String userName) {
         User user = userRepository.getBy(UserSpec.userName(userName));
         deleteData(user);
-        userRepository.delete(user);
+        userRepository.del(user);
         return true;
     }
 
@@ -117,7 +117,7 @@ public class UserService {
     }
 
     private void deleteVideo(Video video) {
-        videoRepository.delete(video);
+        videoRepository.del(video);
         FileTool.deleteVideo(video.getVideoName());
         FileTool.deleteImage(video.getCoverName());
     }

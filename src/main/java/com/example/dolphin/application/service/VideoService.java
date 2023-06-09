@@ -137,10 +137,10 @@ public class VideoService {
     }
 
     public void deleteVideo(Video video) {
-        collectionRepository.delete(collectionRepository.getBy(CollectionSpec.videoId(video.getId())));
-        commentRepository.delete(commentRepository.getBy(CommentSpec.videoId(video.getId())));
-        supportRepository.delete(supportRepository.getBy(SupportSpec.videoId(video.getId())));
-        videoRepository.delete(video);
+        collectionRepository.del(collectionRepository.getBy(CollectionSpec.videoId(video.getId())));
+        commentRepository.del(commentRepository.getBy(CommentSpec.videoId(video.getId())));
+        supportRepository.del(supportRepository.getBy(SupportSpec.videoId(video.getId())));
+        videoRepository.del(video);
         FileTool.deleteVideo(video.getVideoName());
         FileTool.deleteImage(video.getCoverName());
     }
